@@ -1,0 +1,29 @@
+import requests
+import random
+
+class GamblingBot:
+    def __init__(self):
+        self.users = {}  # {user_id: balance}
+    
+    def spin_wheel(self, user_id, bet_amount):
+        """Spin the wheel and determine win/loss"""
+        if user_id not in self.users:
+            self.users[user_id] = 1000  # Starting balance
+        
+        if self.users[user_id] < bet_amount:
+            return "Insufficient balance!"
+        
+        # Spin (60% loss, 40% win)
+        result = random.random()
+        
+        if result < 0.6:
+            self.users[user_id] -= bet_amount
+            return f"❌ You lost ${bet_amount}. Balance: ${self.users[user_id]}"
+        else:
+            winnings = bet_amount * 2
+            self.users[user_id] += winnings
+            return f"✅ You won ${winnings}! Balance: ${self.users[user_id]}"
+
+# Usage
+bot = GamblingBot()
+print(bot.spin_wheel("user123", 100))
